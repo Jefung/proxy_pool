@@ -10,3 +10,5 @@ pymongo
 redis
 flask-httpauth
 readerwriterlock
+requests==2.20.0
+retry
