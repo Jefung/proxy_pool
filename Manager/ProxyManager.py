@@ -27,11 +27,11 @@ class ProxyManager(object):
     """
     ProxyManager
     """
-
     def __init__(self):
         self.db = DbClient()
         self.raw_proxy_queue = 'raw_proxy'
         self.log = LogHandler('proxy_manager')
+        # self.log.error("new a ProxyManager instance")
         self.useful_proxy_queue = 'useful_proxy'
 
     def fetch(self):
@@ -43,26 +43,34 @@ class ProxyManager(object):
         proxy_set = set()
         self.log.info("ProxyFetch : start")
         for proxyGetter in config.proxy_getter_functions:
-            self.log.info("ProxyFetch - {func}: start".format(func=proxyGetter))
+            self.log.info(
+                "ProxyFetch - {func}: start".format(func=proxyGetter))
             try:
                 for proxy in getattr(GetFreeProxy, proxyGetter.strip())():
                     proxy = proxy.strip()
 
                     if not proxy or not verifyProxyFormat(proxy):
                         self.log.error('ProxyFetch - {func}: '
-                                       '{proxy} illegal'.format(func=proxyGetter, proxy=proxy.ljust(20)))
+                                       '{proxy} illegal'.format(
+                                           func=proxyGetter,
+                                           proxy=proxy.ljust(20)))
                         continue
                     elif proxy in proxy_set:
                         self.log.info('ProxyFetch - {func}: '
-                                      '{proxy} exist'.format(func=proxyGetter, proxy=proxy.ljust(20)))
+                                      '{proxy} exist'.format(
+                                          func=proxyGetter,
+                                          proxy=proxy.ljust(20)))
                         continue
                     else:
                         self.log.info('ProxyFetch - {func}: '
-                                      '{proxy} success'.format(func=proxyGetter, proxy=proxy.ljust(20)))
+                                      '{proxy} success'.format(
+                                          func=proxyGetter,
+                                          proxy=proxy.ljust(20)))
                         self.db.put(Proxy(proxy, source=proxyGetter))
                         proxy_set.add(proxy)
             except Exception as e:
-                self.log.error("ProxyFetch - {func}: error".format(func=proxyGetter))
+                self.log.error(
+                    "ProxyFetch - {func}: error".format(func=proxyGetter))
                 self.log.error(str(e))
 
     def get(self):
@@ -100,7 +108,10 @@ class ProxyManager(object):
         total_raw_proxy = self.db.getNumber()
         self.db.changeTable(self.useful_proxy_queue)
         total_useful_queue = self.db.getNumber()
-        return {'raw_proxy': total_raw_proxy, 'useful_proxy': total_useful_queue}
+        return {
+            'raw_proxy': total_raw_proxy,
+            'useful_proxy': total_useful_queue
+        }
 
 
 if __name__ == '__main__':

@@ -33,12 +33,16 @@ HEADER = """
 
 PY3 = sys.version_info >= (3,)
 
-DB_TYPE = getenv('db_type', 'SSDB').upper()
-DB_HOST = getenv('db_host', '127.0.0.1')
-DB_PORT = getenv('db_port', 8888)
+DB_TYPE = getenv('db_type', 'redis').upper()
+# DB_HOST = getenv('db_host', '149.129.88.12')
+DB_HOST = getenv('db_host', '0.0.0.0')
+DB_PORT = getenv('db_port', '6379')
 DB_PASSWORD = getenv('db_password', '')
 
-
+# DB_TYPE = getenv('db_type', 'sqlite').upper()
+# DB_HOST = getenv('db_host', '127.0.0.1')
+# DB_PORT = getenv('db_port', '27017')
+# DB_PASSWORD = getenv('db_password', '')
 """ 数据库配置 """
 DATABASES = {
     "default": {
@@ -63,11 +67,12 @@ PROXY_GETTER = [
     "freeProxy08",
     "freeProxy09",
 ]
-
 """ API config http://127.0.0.1:5010 """
 SERVER_API = {
     "HOST": "0.0.0.0",  # The ip specified which starting the web API
-    "PORT": 5010  # port number to which the server listens to
+    "PORT": 5010,  # port number to which the server listens to
+    "USERNAME": "default",
+    "PASSWORD": "123456",
 }
 
 
@@ -76,16 +81,20 @@ class ConfigError(BaseException):
 
 
 def checkConfig():
-    if DB_TYPE not in ["SSDB", "REDIS"]:
-        raise ConfigError('db_type Do not support: %s, must SSDB/REDIS .' % DB_TYPE)
+    if DB_TYPE not in ["SSDB", "REDIS", "SQLITE"]:
+        raise ConfigError('db_type Do not support: %s, must SSDB/REDIS .' %
+                          DB_TYPE)
 
     if type(DB_PORT) == str and not DB_PORT.isdigit():
         raise ConfigError('if db_port is string, it must be digit, not %s' % DB_PORT)
 
     from ProxyGetter import getFreeProxy
-    illegal_getter = list(filter(lambda key: not hasattr(getFreeProxy.GetFreeProxy, key), PROXY_GETTER))
+    illegal_getter = list(
+        filter(lambda key: not hasattr(getFreeProxy.GetFreeProxy, key),
+               PROXY_GETTER))
     if len(illegal_getter) > 0:
-        raise ConfigError("ProxyGetter: %s does not exists" % "/".join(illegal_getter))
+        raise ConfigError("ProxyGetter: %s does not exists" %
+                          "/".join(illegal_getter))
 
 
 checkConfig()

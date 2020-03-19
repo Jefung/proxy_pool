@@ -72,13 +72,17 @@ class DbClient(object):
             __type = "RedisClient"
         elif "MONGODB" == config.db_type:
             __type = "MongodbClient"
+        elif "SQLITE" == config.db_type:
+            __type = "SqliteClient"
         else:
             pass
-        assert __type, 'type error, Not support DB type: {}'.format(config.db_type)
-        self.client = getattr(__import__(__type), __type)(name=config.db_name,
-                                                          host=config.db_host,
-                                                          port=config.db_port,
-                                                          password=config.db_password)
+        assert __type, 'type error, Not support DB type: {}'.format(
+            config.db_type)
+        self.client = getattr(__import__(__type),
+                              __type)(name=config.db_name,
+                                      host=config.db_host,
+                                      port=config.db_port,
+                                      password=config.db_password)
 
     def get(self, key, **kwargs):
         return self.client.get(key, **kwargs)

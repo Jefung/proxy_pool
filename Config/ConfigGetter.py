@@ -12,7 +12,6 @@
 """
 __author__ = 'JHao'
 
-
 from Util.utilClass import LazyProperty
 from Config.setting import *
 
@@ -21,7 +20,6 @@ class ConfigGetter(object):
     """
     get config
     """
-
     def __init__(self):
         pass
 
@@ -57,6 +55,14 @@ class ConfigGetter(object):
     def host_port(self):
         return SERVER_API.get("PORT", 5010)
 
+    @LazyProperty
+    def api_username(self):
+        return SERVER_API.get("USERNAME", None)
+
+    @LazyProperty
+    def api_password(self):
+        return SERVER_API.get("PASSWORD", None)
+
 
 config = ConfigGetter()
 
@@ -69,3 +75,5 @@ if __name__ == '__main__':
     print(config.host_ip)
     print(config.host_port)
     print(config.db_password)
+    print(config.api_username)
+    print(config.api_password)

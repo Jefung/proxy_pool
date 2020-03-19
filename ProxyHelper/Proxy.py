@@ -16,9 +16,15 @@ import json
 
 
 class Proxy(object):
-
-    def __init__(self, proxy, fail_count=0, region="", proxy_type="",
-                 source="", check_count=0, last_status="", last_time=""):
+    def __init__(self,
+                 proxy,
+                 fail_count=0,
+                 region="",
+                 proxy_type="",
+                 source="",
+                 check_count=0,
+                 last_status="",
+                 last_time=""):
         self._proxy = proxy
         self._fail_count = fail_count
         self._region = region
@@ -43,8 +49,7 @@ class Proxy(object):
                    source=proxy_dict.get("source", ""),
                    check_count=proxy_dict.get("check_count", 0),
                    last_status=proxy_dict.get("last_status", ""),
-                   last_time=proxy_dict.get("last_time", "")
-                   )
+                   last_time=proxy_dict.get("last_time", ""))
 
     @property
     def proxy(self):
@@ -89,14 +94,16 @@ class Proxy(object):
     @property
     def info_dict(self):
         """ 属性字典 """
-        return {"proxy": self._proxy,
-                "fail_count": self._fail_count,
-                "region": self._region,
-                "type": self._type,
-                "source": self._source,
-                "check_count": self.check_count,
-                "last_status": self.last_status,
-                "last_time": self.last_time}
+        return {
+            "proxy": self._proxy,
+            "fail_count": self._fail_count,
+            "region": self._region,
+            "type": self._type,
+            "source": self._source,
+            "check_count": self.check_count,
+            "last_status": self.last_status,
+            "last_time": self.last_time
+        }
 
     @property
     def info_json(self):

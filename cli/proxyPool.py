@@ -20,7 +20,7 @@ sys.path.append('../')
 
 from Config.setting import HEADER
 from Schedule.ProxyScheduler import runScheduler
-from Api.ProxyApi import runFlask,runFlaskWithGunicorn
+from Api.ProxyApi import main as api_main
 
 CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 
@@ -29,8 +29,6 @@ CONTEXT_SETTINGS = dict(help_option_names=['-h', '--help'])
 @click.version_option(version='2.0.0')
 def cli():
     """ProxyPool cli工具"""
-
-
 @cli.command(name="schedule")
 def schedule():
     """ 启动调度程序 """
@@ -42,10 +40,7 @@ def schedule():
 def schedule():
     """ 启动web服务 """
     click.echo(HEADER)
-    if platform.system() == "Windows":
-        runFlask()
-    else:
-        runFlaskWithGunicorn()
+    api_main()
 
 
 if __name__ == '__main__':
